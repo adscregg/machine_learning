@@ -41,7 +41,7 @@ All but tensorflow can be installed straight away using Python's package manager
 ```
 pip install numpy pandas scikit-learn matplotlib seaborn keras
 ```
-The requirements for tensorflow's gpu version is more complicated. All of the below are required, check the [tensorflow website]() to see the exact versions you should download of each piece of software.
+The requirements for tensorflow's gpu version is more complicated. All of the below are required, check the [tensorflow website](https://www.tensorflow.org/install/gpu) to see the exact versions you should download of each piece of software.
 
 1. An Nvidia graphics card
 2. This graphics card has to be CUDA enabled (see this [link](https://developer.nvidia.com/cuda-gpus) to check if yours is CUDA enabled)
