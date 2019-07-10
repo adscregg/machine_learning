@@ -64,6 +64,8 @@ with tf.Session() as sess:
 
 The output should be `b'Hello World'` in addition to many lines of information about your GPU.
 
+If this is not successful or you do not wish to install the GPU version, simply run `pip install tensorflow` in the terminal and this will install the CPU version of tensorflow.
+
 
 ## About the Folders
 
@@ -88,7 +90,7 @@ The random_data.py file contains convenience methods for creating mock datasets 
 
 ##### tf-keras analysis
 
-This folder contains models that use Neural Networks to do classification tasks on a variety of datasets. The files will vary as to which module they use (tensorflow or keras) depending on preference at the time of writing the models.
+This folder contains models that use Neural Networks to do classification tasks on a variety of datasets. The files will vary as to which module they use (tensorflow or keras) depending on preference at the time of writing the models. It is possible to run (most of) the models with the CPU version of tensorflow but this will be very slow and is not reccomended. I will indicate which files are suitable to be run on the CPU version with comments at the top of each file.
 
 ##### visualisations
 
