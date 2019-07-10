@@ -1,6 +1,10 @@
 # machine_learning
 This repo contains simple analysis and visualisations of open source datasets as well as common machine learning algorithms that I have written from scatch in Python.
 
+## Purpose of this repository
+
+This repository serves as a portfolio of code relating to Data Science to demonstrate my interest in the field. It also serves as a practice ground for me to develop my coding knowledge and tools that are commonly used in the Data Science industry.
+
 ## Prerequisites
 
 ##### Python version
