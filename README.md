@@ -42,8 +42,8 @@ The requirements for tensorflow's gpu version is more complicated. All of the be
 1. An Nvidia graphics card
 2. This graphics card has to be CUDA enabled (see this [link](https://developer.nvidia.com/cuda-gpus) to check if yours is CUDA enabled)
 3. The lib, bin and include folder must be added to your path
-4. You must have CuDNN installed on your system (this can be downloaded from [here](), you have to create an account)
-5. A version of Microsoft's VisualStudio which can be downloaded from [here]() and the C/C++ tools box must be checked upon first installation
+4. You must have CuDNN installed on your system (this can be downloaded from [here](https://developer.nvidia.com/cudnn), you have to create an account)
+5. A version of Microsoft's VisualStudio IDE which can be downloaded from [here](https://visualstudio.microsoft.com/) and the C/C++ tools box must be checked upon first installation
 
 I recommend following a video tutorial on how to get tensorflow installed but the above is an outline of what will be required.
 
@@ -59,3 +59,37 @@ with tf.Session() as sess:
 ```
 
 The output should be `b'Hello World'` in addition to many lines of information about your GPU.
+
+
+## About the Folders
+
+### analysis
+
+##### scikit-learn analysis
+This folder contains files where a variety of methods will be used to analysis data with the vast majority of methods being built-in scikit-learn functions. The outline of the structure that each file will have is:
+1. read in dataset
+2. preprocess data
+3. fit and tune models
+4. test models
+
+I hope to have a variety of types of datasets from clean, easy to use datasets, to ones that need significant preprocessing in order to be useful. I also hope to be able to analyse different types of data such as numerical, categorical and NL and get meaningful results.
+
+Classification will likely be the predominant type of analysis done in these files
+
+##### self-written_algorithms
+
+The files ending in \_ADS are machine learning algorithms that I have written from scratch in an attempt to better understand the mathematics behind the algorithms.
+
+The random_data.py file contains convenience methods for creating mock datasets from scikit-learns make datasets methods which are then imported into the other files within this folder
+
+### tf-keras analysis
+
+This folder contains models that use Neural Networks to do classification tasks on a variety of datasets. The files will vary as to which module they use (tensorflow or keras) depending on preference at the time of writing the models.
+
+### visualisations
+
+No model analysis will be done within the files in this folder, it is purely to visualise datsets and experiment with different tools that visualisation libraries offer.
+
+### datasets
+
+Contains all of the datasets that I will be working on in this repository. Most of the files will be .csv files but this may vary.
