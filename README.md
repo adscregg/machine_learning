@@ -82,11 +82,11 @@ The files ending in \_ADS are machine learning algorithms that I have written fr
 
 The random_data.py file contains convenience methods for creating mock datasets from scikit-learns make datasets methods which are then imported into the other files within this folder
 
-### tf-keras analysis
+##### tf-keras analysis
 
 This folder contains models that use Neural Networks to do classification tasks on a variety of datasets. The files will vary as to which module they use (tensorflow or keras) depending on preference at the time of writing the models.
 
-### visualisations
+##### visualisations
 
 No model analysis will be done within the files in this folder, it is purely to visualise datsets and experiment with different tools that visualisation libraries offer.
 
