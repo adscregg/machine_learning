@@ -27,6 +27,7 @@ class Logistic_Regression_Binary:
     def fit(self, X_log_fit, y_log_fit):
         n_feats = X_log_fit.shape[1]
         m = X_log_fit.shape[0]
+        self.m = m
         weights = np.zeros((1,n_feats))
         bias = 0
         cost = np.inf
@@ -35,18 +36,17 @@ class Logistic_Regression_Binary:
             if i % 20 == 0:
                 print('After {num} iterations the cost is {c}'.format(num = i, c = cost))
 
-            lin_eqn = np.dot(weights, np.transpose(X_log_fit)) + bias
-            result = 1/(1 + np.exp(-lin_eqn))
-
             y_T = np.transpose(y_log_fit)
             prev_cost = cost
-            cost = (-1/m)*(np.sum((y_T*np.log(result)) + ((1 - y_T)*np.log(1-result + 0.000001))))
 
-            dw = (1/m)*(np.dot(np.transpose(X_log_fit), np.transpose(result-np.transpose(y_log_fit))))
-            db = (1/m)*(np.sum(result-y_T))
+            lin_eqn = np.dot(weights, np.transpose(X_log_fit)) + bias
+            result = self._sigmoid(lin_eqn)
 
-            weights = weights - (self.learn_rate * np.transpose(dw))
-            bias = bias - (self.learn_rate * db)
+
+            cost = self._cost_function(result, y_T)
+            dw, db = self._shift_weights_and_bias_by(X_log_fit, y_log_fit, result)
+            weights, bias = self._update_weights_and_bias(weights, bias, dw, db)
+
             if prev_cost - cost < 0.001:
                 print('After {num} iterations the cost is {c}'.format(num = i, c = cost))
                 break
@@ -55,6 +55,25 @@ class Logistic_Regression_Binary:
         self.b = bias
 
         return self
+
+    def _sigmoid(self, lin_eqn):
+        return 1/(1 + np.exp(-lin_eqn))
+
+    def _cost_function(self, result, targets_T):
+        m = self.m
+        return (-1/m)*(np.sum((targets_T*np.log(result)) + ((1 - targets_T)*np.log(1-result + 0.000001))))
+
+    def _update_weights_and_bias(self, weights, bias, dw, db):
+        w = weights - (self.learn_rate * np.transpose(dw))
+        b = bias - (self.learn_rate * db)
+        return w, b
+
+    def _shift_weights_and_bias_by(self, data, target, guess):
+        m = self.m
+        dw = (1/m)*(np.dot(np.transpose(data), np.transpose(guess-np.transpose(target))))
+        db = (1/m)*(np.sum(guess-np.transpose(target)))
+        return dw, db
+
 
     def predict(self, log_predict):
         pred_val = np.dot(self.w, np.transpose(log_predict)) + self.b

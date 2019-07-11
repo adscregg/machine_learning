@@ -99,3 +99,12 @@ No model analysis will be done within the files in this folder, it is purely to 
 ### datasets
 
 Contains all of the datasets that I will be working on in this repository. Most of the files will be .csv files but this may vary.
+
+## Notes for running files on local machine
+
+Always run the files from the terminal as there have been issues with file paths not being found when running scripts within an IDE using an add-in package.
+
+## Acknowledgements
+
+- Sentdex: https://www.youtube.com/user/sentdex
+- 3Blue1Brown: https://www.youtube.com/channel/UCYO_jab_esuFRV4b17AJtAw

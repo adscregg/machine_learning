@@ -1,4 +1,4 @@
-if __name__() == '__main__':
+if __name__ == '__main__':
 
     from sklearn.datasets import make_blobs, make_moons, make_circles
     import pandas as pd
