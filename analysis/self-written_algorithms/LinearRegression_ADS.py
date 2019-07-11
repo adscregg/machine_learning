@@ -25,10 +25,25 @@ class Linear_Regression:
         pass
 
     def fit(self, fit_data, fit_data_target):
+        fit_data = np.array(fit_data)
+        inputs = np.c_[fit_data, np.ones(fit_data.shape[0])]
+        outputs = np.array(fit_data_target)
+        in_T = np.transpose(inputs)
+
+        coef_matrix = in_T @ inputs
+        results = in_T @ outs
+
+        self.lin_coefs = np.linalg.solve(coef_matrix, results)
+
+        self.weights = self.lin_coefs[:-1]
+        self.intercept = self.lin_coefs[-1]
+
         return self
 
     def predict(self, X_test):
-        pass
+        X_test = np.array(X_test).reshape((X_test.shape[0],-1))
+        predictions = X_test @ self.weights + self.intercept
+        return predictions
 
     def fit_predict(self, X_train, y_train, X_test):
         self.fit(X_train, y_train)
