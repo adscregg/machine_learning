@@ -104,6 +104,13 @@ Contains all of the datasets that I will be working on in this repository. Most 
 
 Always run the files from the terminal as there have been issues with file paths not being found when running scripts within an IDE using an add-in package.
 
+## Useful links
+
+- CNN: https://github.com/nehal96/Deep-Learning-ND-Exercises/blob/master/Convolutional%20Neural%20Networks/convolutional-neural-networks-notes.md
+- Logistic Regression: https://medium.com/deep-math-machine-learning-ai/chapter-2-0-logistic-regression-with-math-e9cbb3ec6077
+
+
+
 ## Acknowledgements
 
 - Sentdex: https://www.youtube.com/user/sentdex

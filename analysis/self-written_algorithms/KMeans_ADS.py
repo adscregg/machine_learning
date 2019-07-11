@@ -56,51 +56,25 @@ class K_means_nD:
         k = self.n_clusters
         max_iters = self.max_iters
 
-        centroids = []
-        for _ in range(k):
-            centroid = []
-            for i in range(n_features):
-                cent_point = np.random.uniform(min(k_data[i]), max(k_data[i]))
-                centroid.append(cent_point)
-            centroids.append(tuple(centroid))
+        centroids = self._create_centroids(self.n_clusters, k_data)
 
         for _ in range(max_iters):
-            old_centroids = centroids
-            cluster_num = [None for i in range(len(k_data))]
 
-            for record in range(len(k_data)):
-                distances = []
-                points = list(k_data.loc[record, :])
-                for centroid in centroids:
-                    cent = list(centroid)
-                    dist = np.sqrt(sum([(p - c) ** 2 for p, c in zip(points, cent)]))
-                    distances.append(dist)
-                cluster_num[record] = np.argmin(distances)
+            old_centroids = centroids
+
+            cluster_num = self._calc_distances_and_assign_cluster(k_data, centroids)
 
             k_data['cluster num'] = cluster_num
 
-            new_centroids = []
-            for number, centroid in enumerate(centroids):
-                num_k_data = k_data[k_data['cluster num'] == number]
-                cent_new = []
-                for i in range(n_features):
-                    cent = np.mean(num_k_data[i]) if len(num_k_data != 0) else np.mean(k_data[i])
-                    cent_new.append(cent)
-                cent_new = tuple(cent_new)
-                new_centroids.append(cent_new)
+            new_centroids = self._shift_centroids(centroids, k_data)
 
             centroids = new_centroids
 
-            centroid_shifts = []
-            for index in range(len(centroids)):
-                c0 = list(centroids[index])
-                c1 = list(old_centroids[index])
-                shift = np.sqrt(sum([(x - y)**2 for x, y in zip(c0, c1)]))
-                centroid_shifts.append(shift)
-            less_tol = [elm < self.tolerance for elm in centroid_shifts]
+            less_tol = self._centroid_shift_dist(centroids, old_centroids)
 
             if all(less_tol):
                 break
+                
         t1 = time.time()
         self.fit_runtime = t1 - t0
         self.centers = old_centroids
@@ -122,7 +96,7 @@ class K_means_nD:
             numpy array of the predicted classes.
 
         """
-        centroids = self.centroids
+        centroids = self.centers
         classification = []
         for row in range(k_data.shape[0]):
             distances = [0 for i in range(len(centroids))]
@@ -152,3 +126,52 @@ class K_means_nD:
         """
         self.fit(X_fit)
         return self.predict(X_predict)
+
+    def _create_centroids(self, n_clusters, data):
+        n_features = data.shape[1]
+        centroids = []
+        for _ in range(n_clusters):
+            centroid = []
+            for i in range(n_features):
+                cent_point = np.random.uniform(min(data[i]), max(data[i]))
+                centroid.append(cent_point)
+            centroids.append(tuple(centroid))
+        return centroids
+
+    def _calc_distances_and_assign_cluster(self, data, centroids):
+        cluster_num = [None] * len(data)
+        for record in range(len(data)):
+            distances = []
+            points = list(data.loc[record, :])
+            for centroid in centroids:
+                cent = list(centroid)
+                dist = np.sqrt(sum([(p - c) ** 2 for p, c in zip(points, cent)]))
+                distances.append(dist)
+            cluster_num[record] = np.argmin(distances)
+
+        return cluster_num
+
+    def _shift_centroids(self, centroids, data):
+        new_centroids = []
+        n_features = data.shape[1] - 1
+        for number, centroid in enumerate(centroids):
+            num_k_data = data[data['cluster num'] == number]
+            cent_new = []
+            for i in range(n_features):
+                cent = np.mean(num_k_data[i]) if len(num_k_data) != 0 else np.mean(data[i])
+                cent_new.append(cent)
+            cent_new = tuple(cent_new)
+            new_centroids.append(cent_new)
+
+        return new_centroids
+
+    def _centroid_shift_dist(self, new, old):
+        centroid_shifts = []
+        for index in range(len(new)):
+            c0 = list(new[index])
+            c1 = list(old[index])
+            shift = np.sqrt(sum([(x - y)**2 for x, y in zip(c0, c1)]))
+            centroid_shifts.append(shift)
+        less_tol = [elm < self.tolerance for elm in centroid_shifts]
+
+        return less_tol

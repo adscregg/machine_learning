@@ -80,7 +80,6 @@ def train_NN(X):
 
     with tf.compat.v1.Session() as sess:
         sess.run(tf.compat.v1.global_variables_initializer())
-        # File_Writer = tf.summary.FileWriter('C:\\Users\\Anthony\\Documents\\Python files\\graph', sess.graph)
 
         for epoch in range(epochs):
             epoch_loss = 0
