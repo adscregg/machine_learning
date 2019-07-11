@@ -108,6 +108,7 @@ Always run the files from the terminal as there have been issues with file paths
 
 - CNN: https://github.com/nehal96/Deep-Learning-ND-Exercises/blob/master/Convolutional%20Neural%20Networks/convolutional-neural-networks-notes.md
 - Logistic Regression: https://medium.com/deep-math-machine-learning-ai/chapter-2-0-logistic-regression-with-math-e9cbb3ec6077
+- Linear Regression: https://brilliant.org/wiki/linear-regression/
 
 
 
