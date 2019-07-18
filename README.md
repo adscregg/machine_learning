@@ -35,11 +35,12 @@ The following is a list of required packages to be install before full use of al
 5. seaborn
 6. keras
 7. tensorflow (gpu version recommended)
+8. cv2
 
 All but tensorflow can be installed straight away using Python's package manager, pip. Run the following at the terminal:
 
 ```
-pip install numpy pandas scikit-learn matplotlib seaborn keras
+pip install numpy pandas scikit-learn matplotlib seaborn keras cv2
 ```
 The requirements for tensorflow's gpu version is more complicated. All of the below are required, check the [tensorflow website](https://www.tensorflow.org/install/gpu) to see the exact versions you should download of each piece of software.
 
