@@ -26,7 +26,7 @@ noting that this is the 64 bit version.
 
 ##### Python packages
 
-The following is a list of required packages to be install before full use of all the code can be achieved.
+The following is a list of required packages to be install before full use of all the code can be achieved on a local system.
 
 1. numpy
 2. pandas
@@ -67,6 +67,10 @@ The output should be `b'Hello World'` in addition to many lines of information a
 
 If this is not successful or you do not wish to install the GPU version, simply run `pip install tensorflow` in the terminal and this will install the CPU version of tensorflow.
 
+## Setup
+
+To setup the project run `git clone https://github.com/adscregg/machine_learning.git .`.
+
 
 ## About the Folders
 
@@ -91,7 +95,7 @@ The random_data.py file contains convenience methods for creating mock datasets 
 
 ##### tf-keras analysis
 
-This folder contains models that use Neural Networks to do classification tasks on a variety of datasets. The files will vary as to which module they use (tensorflow or keras) depending on preference at the time of writing the models. It is possible to run (most of) the models with the CPU version of tensorflow but this will be very slow and is not reccomended. I will indicate which files are suitable to be run on the CPU version with comments at the top of each file.
+This folder contains models that use Neural Networks to do classification tasks on a variety of datasets. The files will vary as to which module they use (tensorflow or keras) depending on preference at the time of writing the models. It is possible to run (most of) the models with the CPU version of tensorflow on a local system, but this will be very slow and is not recommended. I will indicate which files are suitable to be run on the CPU version with comments at the top of each file.
 
 ##### visualisations
 
