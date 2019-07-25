@@ -9,7 +9,7 @@ sns.set_style('whitegrid')
 
 import nltk
 from nltk.corpus import stopwords
-from nltk.stem import PorterStemmer
+from nltk.stem import PorterStemmer, WordNetLemmatizer
 
 from sklearn.feature_extraction.text import CountVectorizer, TfidfTransformer
 from sklearn.naive_bayes import MultinomialNB
@@ -138,4 +138,35 @@ print(accuracy_score(y_test, pred_balanced_stem), '\n\n')
 print(classification_report(y_test, pred_balanced_stem), '\n\n')
 print(confusion_matrix(y_test, pred_balanced_stem), '\n\n')
 
-print('This model performs very simmilar to the previous model, it is possibly marginally better but this will likely depend on how the data is split.')
+print('This model performs very simmilar to the previous model, it is possibly marginally better but this will likely depend on how the data is split. Instead of stemming, we could try Lemmatizing the words.\n')
+
+
+def text_process_with_lemma(text):
+    lemma = WordNetLemmatizer()
+    no_punc = [char for char in text if char not in string.punctuation]
+    no_punc = ''.join(no_punc)
+    no_stops = [word for word in no_punc.split() if word.lower() not in stopwords.words('english')]
+    words_lemma = [lemma.lemmatize(word.lower()) for word in no_stops]
+    return words_lemma
+
+text_pipeline_lemma = Pipeline([('bow', CountVectorizer(analyzer=text_process_with_lemma)),
+                            ('tfidf', TfidfTransformer()),
+                            ('NaiveBayes', MultinomialNB())
+                        ])
+
+print('Splitting data into train and test set...')
+X_train, X_test, y_train, y_test = train_test_split(reddit['BODY'], reddit['REMOVED'])
+print('done\n')
+
+print('Fitting NaiveBayes model with balanced and Lemmatized dataset...')
+remove_analysis_balanced_lemma = text_pipeline_lemma.fit(X_train, y_train)
+print('done\nPredicting values...')
+pred_balanced_lemma = remove_analysis_balanced_lemma.predict(X_test)
+print('done\n')
+
+
+print(accuracy_score(y_test, pred_balanced_stem), '\n\n')
+print(classification_report(y_test, pred_balanced_stem), '\n\n')
+print(confusion_matrix(y_test, pred_balanced_stem), '\n\n')
+
+print('This model appears to be no better than chance at predicting whether a comment should be removed, therefore we abandon this approach.')
