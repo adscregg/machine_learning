@@ -51,30 +51,30 @@ class K_means_nD:
             Returned class like object to cal methods and properties off of.
 
         """
-        n_features = k_data.shape[1]
+        n_features = k_data.shape[1] # number of columns of the dataset
         t0 = time.time()
         k = self.n_clusters
         max_iters = self.max_iters
 
-        centroids = self._create_centroids(self.n_clusters, k_data)
+        centroids = self._create_centroids(self.n_clusters, k_data) # randomly create centroids
 
         for _ in range(max_iters):
 
-            old_centroids = centroids
+            old_centroids = centroids # create copy of centroids variable to compare later
 
-            cluster_num = self._calc_distances_and_assign_cluster(k_data, centroids)
+            cluster_num = self._calc_distances_and_assign_cluster(k_data, centroids) # distance to each cluster and assign to closest
 
-            k_data['cluster num'] = cluster_num
+            k_data['cluster num'] = cluster_num # create column of dataframe with cluter num
 
-            new_centroids = self._shift_centroids(centroids, k_data)
+            new_centroids = self._shift_centroids(centroids, k_data) # calculate middle of clusters and shift
 
-            centroids = new_centroids
+            centroids = new_centroids # updated centroid placement
 
-            less_tol = self._centroid_shift_dist(centroids, old_centroids)
+            less_tol = self._centroid_shift_dist(centroids, old_centroids) # how much did the centers move by
 
-            if all(less_tol):
+            if all(less_tol): # if they are all less than the defined tolerance then break the loop
                 break
-                
+
         t1 = time.time()
         self.fit_runtime = t1 - t0
         self.centers = old_centroids
@@ -97,16 +97,16 @@ class K_means_nD:
 
         """
         centroids = self.centers
-        classification = []
-        for row in range(k_data.shape[0]):
-            distances = [0 for i in range(len(centroids))]
-            points = list(k_data.loc[row, :])
-            for num, centroid in enumerate(centroids):
-                centroid = list(centroid)
-                distances[num] = np.sqrt(sum([(a - b) ** 2 for a, b in zip(points, centroid)]))
-            classification.append(np.argmin(distances))
-        k_data['classification'] = classification
-        return np.array(classification)
+        classification = [] # list that will contain the classification
+        for row in range(k_data.shape[0]): # for each record
+            distances = [0 for i in range(len(centroids))] # list of zeros as a placeholder
+            points = list(k_data.loc[row, :]) # list of each of the feature values
+            for num, centroid in enumerate(centroids): # for each center
+                centroid = list(centroid) # cast to a list
+                distances[num] = np.sqrt(sum([(a - b) ** 2 for a, b in zip(points, centroid)])) # calculate all distances
+            classification.append(np.argmin(distances)) # add index of min distance
+        k_data['classification'] = classification # create column with class in it
+        return np.array(classification) # return array of classifications
 
     def fit_predict(self, X_fit, X_predict):
         """Convinience method to fit and predict data in a single method call.
@@ -128,50 +128,50 @@ class K_means_nD:
         return self.predict(X_predict)
 
     def _create_centroids(self, n_clusters, data):
-        n_features = data.shape[1]
-        centroids = []
-        for _ in range(n_clusters):
-            centroid = []
-            for i in range(n_features):
-                cent_point = np.random.uniform(min(data[i]), max(data[i]))
-                centroid.append(cent_point)
-            centroids.append(tuple(centroid))
+        n_features = data.shape[1] # number of columns in the dataset
+        centroids = [] # list that will contain tuples of the centtoid locations
+        for _ in range(n_clusters): # loop depending on how many cluster have been specified
+            centroid = [] # list that will contain points for sigle centroid
+            for i in range(n_features): # for each feature
+                cent_point = np.random.uniform(min(data[i]), max(data[i])) # random point within the feature max and min
+                centroid.append(cent_point) # add the point to the centroid
+            centroids.append(tuple(centroid)) # create tuple from list of individual points and add it to list
         return centroids
 
     def _calc_distances_and_assign_cluster(self, data, centroids):
-        cluster_num = [None] * len(data)
-        for record in range(len(data)):
-            distances = []
-            points = list(data.loc[record, :])
-            for centroid in centroids:
-                cent = list(centroid)
-                dist = np.sqrt(sum([(p - c) ** 2 for p, c in zip(points, cent)]))
-                distances.append(dist)
-            cluster_num[record] = np.argmin(distances)
+        cluster_num = [None] * len(data) # no records belong to any cluster yet so they are assigned None
+        for record in range(len(data)): # for row in datset
+            distances = [] # will contain distances to each centroid
+            points = list(data.loc[record, :]) # feature values as a list
+            for centroid in centroids: # each centroid
+                cent = list(centroid) # cast tuple to list
+                dist = np.sqrt(sum([(p - c) ** 2 for p, c in zip(points, cent)])) # calculate Euclidian distance to centroid
+                distances.append(dist) # add to distances list
+            cluster_num[record] = np.argmin(distances) # assign to cluster than is closest
 
         return cluster_num
 
     def _shift_centroids(self, centroids, data):
         new_centroids = []
-        n_features = data.shape[1] - 1
-        for number, centroid in enumerate(centroids):
-            num_k_data = data[data['cluster num'] == number]
+        n_features = data.shape[1] - 1 # num features, -1 as we added cluster num column which is not to be counted as a feature
+        for number, centroid in enumerate(centroids): # loop through centroid and it's index
+            num_k_data = data[data['cluster num'] == number] # get all data that belongs to the specific cluster
             cent_new = []
             for i in range(n_features):
-                cent = np.mean(num_k_data[i]) if len(num_k_data) != 0 else np.mean(data[i])
-                cent_new.append(cent)
-            cent_new = tuple(cent_new)
-            new_centroids.append(cent_new)
+                cent = np.mean(num_k_data[i]) if len(num_k_data) != 0 else np.mean(data[i]) # mean of all datapoints of feature i
+                cent_new.append(cent) # add it to cent_new list
+            cent_new = tuple(cent_new) # cast to a tuple
+            new_centroids.append(cent_new) # new centroid tuple added to list
 
         return new_centroids
 
     def _centroid_shift_dist(self, new, old):
         centroid_shifts = []
         for index in range(len(new)):
-            c0 = list(new[index])
-            c1 = list(old[index])
-            shift = np.sqrt(sum([(x - y)**2 for x, y in zip(c0, c1)]))
-            centroid_shifts.append(shift)
-        less_tol = [elm < self.tolerance for elm in centroid_shifts]
+            c0 = list(new[index]) # new position of centroid
+            c1 = list(old[index]) # old position of centroid
+            shift = np.sqrt(sum([(x - y)**2 for x, y in zip(c0, c1)])) # distance it has moved
+            centroid_shifts.append(shift) # add shift to list
+        less_tol = [elm < self.tolerance for elm in centroid_shifts] # is the shift less than defined tolerance
 
         return less_tol
