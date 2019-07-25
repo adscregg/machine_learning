@@ -19,36 +19,36 @@ from sklearn.pipeline import Pipeline
 from sklearn.svm import SVC
 
 
-reddit = pd.read_csv('../../datasets/reddit_train.csv')
+reddit = pd.read_csv('../../datasets/reddit_train.csv') #read in the dataset
 reddit.drop(['num', 'X'], axis = 1, inplace = True) # These columns provide no information for classification so we remove them
 reddit['REMOVED'] = reddit['REMOVED'].map({1:'Yes', 0:'No'}) # To make the understanding of the dataset clearer for now
 
-print(reddit.head(), '\n\n')
+print(reddit.head(), '\n\n') # see the first 5 rows of data
 
-print('Description of the data: \n')
+print('Description of the data: \n') # stats about the data
 print(reddit.describe(), '\n\n')
 
 print('Description of the data grouped by REMOVED: \n')
-print(reddit.groupby('REMOVED').describe(), '\n\n')
+print(reddit.groupby('REMOVED').describe(), '\n\n') # stats about the data group by category
 
 print('Getting length of each comment...')
 reddit['LENGTH'] = reddit['BODY'].apply(len) # find the length of each comment
 print('done\n')
 
-reddit.hist(column = 'LENGTH', bins = 100, by = 'REMOVED', sharex = True)
+reddit.hist(column = 'LENGTH', bins = 100, by = 'REMOVED', sharex = True) # histogram of num of characters in each comment
 
 print('From this plot we can see that the length of the comment does not seem to be a good indicator of whether a message was removed or not, this is as expected but it is always worth exploring the data.\n')
 plt.show()
 
 def extract_punc(text):
-    punc = [char for char in text if char in string.punctuation]
+    punc = [char for char in text if char in string.punctuation] # add punctuation to list
     return len(punc)
 
 print('Getting number of punctuation points used in comments...')
-reddit['NUM_PUNC'] = reddit['BODY'].apply(extract_punc)
+reddit['NUM_PUNC'] = reddit['BODY'].apply(extract_punc) # apply above function to each row of data
 print('done\n')
 
-reddit.hist(column = 'NUM_PUNC', bins = 100, by = 'REMOVED', sharex = True)
+reddit.hist(column = 'NUM_PUNC', bins = 100, by = 'REMOVED', sharex = True) # histogram of num of punctuation marks
 
 print('Again this shows that there is little to no difference between the distribution of number of punctuation points used in comments that were removed and not removed meaning it is not a good indicator to add to our classifier.\n')
 plt.show()
@@ -58,23 +58,23 @@ plt.show()
 # It is important to preprocess your text data into a simpler form, for example removed words that carry no weight, e.g. 'I' or 'an' so as to not drown out the important words that do carry meaning, we will also remove punctuation from our comments, however this could be an important feature in some datasets.
 
 def text_process(text):
-    no_punc = [char for char in text if char not in string.punctuation]
-    no_punc = ''.join(no_punc)
-    return [word for word in no_punc.split() if word.lower() not in stopwords.words('english')]
+    no_punc = [char for char in text if char not in string.punctuation] # non punctuation characters
+    no_punc = ''.join(no_punc) # join back together to a single string
+    return [word for word in no_punc.split() if word.lower() not in stopwords.words('english')] # remove stopwords
 
 
 print('Splitting data into train and test set...')
-X_train, X_test, y_train, y_test = train_test_split(reddit['BODY'], reddit['REMOVED'])
+X_train, X_test, y_train, y_test = train_test_split(reddit['BODY'], reddit['REMOVED']) # split data into train and test set
 print('done\n')
 
-text_pipeline = Pipeline([('bow', CountVectorizer(analyzer=text_process)),
-                            ('tfidf', TfidfTransformer()),
-                            ('NaiveBayes', MultinomialNB())
+text_pipeline = Pipeline([('bow', CountVectorizer(analyzer=text_process)), # create pipline
+                            ('tfidf', TfidfTransformer()), # Term Frequency Inverse Document Frequency
+                            ('NaiveBayes', MultinomialNB()) # NaiveBayes algorithm
                         ])
 print('Fitting NaiveBayes model...')
-remove_analysis = text_pipeline.fit(X_train, y_train)
+remove_analysis = text_pipeline.fit(X_train, y_train) # run the pipeline
 print('done\nPredicting values...')
-pred = remove_analysis.predict(X_test)
+pred = remove_analysis.predict(X_test) # predict values based on model
 print('done\n')
 
 print(accuracy_score(y_test, pred), '\n\n')
@@ -83,23 +83,23 @@ print(confusion_matrix(y_test, pred), '\n\n')
 
 print('We can see that although the accuracy score of this model seemed decent at around 68%, the actual model is terrible, this could be due to the significant class imbalance. Following, we create a model where the classes are evenly balanced\n')
 
-reddit_no = reddit[reddit['REMOVED'] == 'No']
-reddit_yes = reddit[reddit['REMOVED'] == 'Yes']
+reddit_no = reddit[reddit['REMOVED'] == 'No'] # data from the No class
+reddit_yes = reddit[reddit['REMOVED'] == 'Yes'] # data from the Yes class
 
-to_select = min(len(reddit_no), len(reddit_yes))
+to_select = min(len(reddit_no), len(reddit_yes)) # length of smallest dataset
 
-reddit = pd.concat([reddit_no.iloc[:to_select,:], reddit_yes.iloc[:to_select,:]])
+reddit = pd.concat([reddit_no.iloc[:to_select,:], reddit_yes.iloc[:to_select,:]]) # combine the datasets so they are balanced
 sns.countplot(reddit['REMOVED'])
 plt.show()
 
 print('Splitting data into train and test set...')
-X_train, X_test, y_train, y_test = train_test_split(reddit['BODY'], reddit['REMOVED'])
+X_train, X_test, y_train, y_test = train_test_split(reddit['BODY'], reddit['REMOVED']) # split training data into train and test set
 print('done\n')
 
 print('Fitting NaiveBayes model with balanced dataset...')
-remove_analysis_balanced = text_pipeline.fit(X_train, y_train)
+remove_analysis_balanced = text_pipeline.fit(X_train, y_train) # fit pipeline
 print('done\nPredicting values...')
-pred_balanced = remove_analysis_balanced.predict(X_test)
+pred_balanced = remove_analysis_balanced.predict(X_test) # predict values
 print('done\n')
 
 print(accuracy_score(y_test, pred_balanced), '\n\n')
@@ -111,26 +111,26 @@ print('Although the accuracy of the model is approximitely equal to that of the 
 print('To make the predictions better, another thing that might work is stemming. This is the process of attempting to reduce a word down to it\'s base word, e.g. running would become run. Lets try this and see if it has an impact on our predictions.(we will use the same balanced dataset as the previous model)\n')
 
 def text_process_with_stem(text):
-    ps = PorterStemmer()
-    no_punc = [char for char in text if char not in string.punctuation]
-    no_punc = ''.join(no_punc)
-    no_stops = [word for word in no_punc.split() if word.lower() not in stopwords.words('english')]
-    words_ps = [ps.stem(word.lower()) for word in no_stops]
+    ps = PorterStemmer() # stemmer object
+    no_punc = [char for char in text if char not in string.punctuation] # remove punctuation
+    no_punc = ''.join(no_punc) # combine to a string
+    no_stops = [word for word in no_punc.split() if word.lower() not in stopwords.words('english')] # remove stopwords
+    words_ps = [ps.stem(word.lower()) for word in no_stops] # stem words
     return words_ps
 
-text_pipeline_stem = Pipeline([('bow', CountVectorizer(analyzer=text_process_with_stem)),
+text_pipeline_stem = Pipeline([('bow', CountVectorizer(analyzer=text_process_with_stem)), # changed analyzer
                             ('tfidf', TfidfTransformer()),
                             ('NaiveBayes', MultinomialNB())
                         ])
 
 print('Splitting data into train and test set...')
-X_train, X_test, y_train, y_test = train_test_split(reddit['BODY'], reddit['REMOVED'])
+X_train, X_test, y_train, y_test = train_test_split(reddit['BODY'], reddit['REMOVED']) # split training data
 print('done\n')
 
 print('Fitting NaiveBayes model with balanced and stemmed dataset...')
-remove_analysis_balanced_stem = text_pipeline_stem.fit(X_train, y_train)
+remove_analysis_balanced_stem = text_pipeline_stem.fit(X_train, y_train) # fit model
 print('done\nPredicting values...')
-pred_balanced_stem = remove_analysis_balanced_stem.predict(X_test)
+pred_balanced_stem = remove_analysis_balanced_stem.predict(X_test) # predict off of model
 print('done\n')
 
 
@@ -146,22 +146,22 @@ def text_process_with_lemma(text):
     no_punc = [char for char in text if char not in string.punctuation]
     no_punc = ''.join(no_punc)
     no_stops = [word for word in no_punc.split() if word.lower() not in stopwords.words('english')]
-    words_lemma = [lemma.lemmatize(word.lower()) for word in no_stops]
+    words_lemma = [lemma.lemmatize(word.lower()) for word in no_stops] # Lemmatize words
     return words_lemma
 
-text_pipeline_lemma = Pipeline([('bow', CountVectorizer(analyzer=text_process_with_lemma)),
+text_pipeline_lemma = Pipeline([('bow', CountVectorizer(analyzer=text_process_with_lemma)), # changed analyzer
                             ('tfidf', TfidfTransformer()),
                             ('NaiveBayes', MultinomialNB())
                         ])
 
 print('Splitting data into train and test set...')
-X_train, X_test, y_train, y_test = train_test_split(reddit['BODY'], reddit['REMOVED'])
+X_train, X_test, y_train, y_test = train_test_split(reddit['BODY'], reddit['REMOVED']) # split data
 print('done\n')
 
 print('Fitting NaiveBayes model with balanced and Lemmatized dataset...')
-remove_analysis_balanced_lemma = text_pipeline_lemma.fit(X_train, y_train)
+remove_analysis_balanced_lemma = text_pipeline_lemma.fit(X_train, y_train) # fit model
 print('done\nPredicting values...')
-pred_balanced_lemma = remove_analysis_balanced_lemma.predict(X_test)
+pred_balanced_lemma = remove_analysis_balanced_lemma.predict(X_test) # predict unseen instances
 print('done\n')
 
 

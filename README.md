@@ -16,6 +16,7 @@ To ensure that you have the correct version of Python running, start a Python sh
 ```python
 import sys
 print(sys.version)
+exit()
 ```
 
 You should see the output as being something like:
@@ -36,11 +37,12 @@ The following is a list of required packages to be install before full use of al
 6. keras
 7. tensorflow (gpu version recommended)
 8. cv2
+9. nltk
 
 All but tensorflow can be installed straight away using Python's package manager, pip. Run the following at the terminal:
 
 ```
-pip install numpy pandas scikit-learn matplotlib seaborn keras cv2
+pip install numpy pandas scikit-learn matplotlib seaborn keras cv2 nltk
 ```
 The requirements for tensorflow's gpu version is more complicated. All of the below are required, check the [tensorflow website](https://www.tensorflow.org/install/gpu) to see the exact versions you should download of each piece of software.
 
@@ -61,6 +63,7 @@ import tensorflow as tf
 c = tf.constant('Hello World')
 with tf.Session() as sess:
   print(sess.run(c))
+exit()
 ```
 
 The output should be `b'Hello World'` in addition to many lines of information about your GPU.
@@ -70,6 +73,17 @@ If this is not successful or you do not wish to install the GPU version, simply 
 ## Setup
 
 To setup the project run `git clone https://github.com/adscregg/machine_learning.git .`.
+
+You will need to install nltk packages for the code to run in its current form without adding in a few extra lines. There are several ways to do this but I recommend the following:
+
+Open a python shell and run the code below.
+
+```Python
+import nltk
+nltk.download('all')
+exit()
+```
+This will install all nltk modules from the package and is not completely necessary to install them all but still recommended.
 
 
 ## About the Folders
