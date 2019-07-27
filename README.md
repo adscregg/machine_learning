@@ -1,5 +1,5 @@
 # machine_learning
-This repo contains simple analysis and visualisations of open source datasets as well as common machine learning algorithms that I have written from scatch in Python.
+This repo contains simple analysis of open source datasets as well as common machine learning algorithms that I have written from scatch in Python. All files are written in .py and .ipynb formats depending on preference. The .py analysis files are written in such a way that when run from the command prompt/terminal they behave like a notebook and hence "tell a story" as the script runs.
 
 ## Purpose of this repository
 
