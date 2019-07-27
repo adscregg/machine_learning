@@ -85,6 +85,16 @@ exit()
 ```
 This will install all nltk modules from the package and is not completely necessary to install them all but still recommended.
 
+## Runtime info
+##### System details
+- TensorFlow-GPU version 1.14.0
+- NVidia GeForce GTX 1050 Ti with Max-Q Design
+##### Approx runtimes
+- reddit_NLP_analysis.py: 12 minutes
+- wine_classification.py: 30 - 40 seconds
+- cats_and_dogs.py: 2 minutes
+- mnist.py: 30 - 40 seconds
+
 
 ## About the Folders
 
@@ -110,10 +120,6 @@ The random_data.py file contains convenience methods for creating mock datasets 
 ##### tf-keras analysis
 
 This folder contains models that use Neural Networks to do classification tasks on a variety of datasets. The files will vary as to which module they use (tensorflow or keras) depending on preference at the time of writing the models. It is possible to run (most of) the models with the CPU version of tensorflow on a local system, but this will be very slow and is not recommended. I will indicate which files are suitable to be run on the CPU version with comments at the top of each file.
-
-##### visualisations
-
-No model analysis will be done within the files in this folder, it is purely to visualise datsets and experiment with different tools that visualisation libraries offer.
 
 ### datasets
 
