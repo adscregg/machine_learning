@@ -7,7 +7,7 @@ import numpy as np
 print("Using TensorFlow version " + tf.__version__) # display version of tensorflow being used
 
 mnist = keras.datasets.mnist
-(train_images_mnist, train_labels_mnist), (test_images_mnist, test_labels_mnist) = fashion_mnist.load_data() # load the mnist dataset
+(train_images_mnist, train_labels_mnist), (test_images_mnist, test_labels_mnist) = fashion_mnist.load_data() # load the fashion mnist dataset
 
 l1_nodes = 500 # 500 nodes in l1
 l2_nodes = 500
