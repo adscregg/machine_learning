@@ -67,7 +67,7 @@ plt.show()
 class impute_from_distribution(BaseEstimator, TransformerMixin): # inherit from sklearn.base classes to create own pipeline function
     def __init__(self, col):
         self.col = col
-        self.target_col = 'type' # automatically set the target column to 'target'
+        self.target_col = 'type' # automatically set the target column to 'type'
     def fit(self, X, y = None):
 
         _ , self.white_dist = np.histogram(X[(X[self.target_col] == 'white')][self.col].dropna(), bins = 75) # data into 75 bins
@@ -165,22 +165,22 @@ print('KNN acc: ', accuracy_score(y_test, KNN_pred))
 print('Although these results look promising, do not forget that we had a very significant class imbalance which may have affected our models. Lets look at the classification report and confusion matrix for each of the models.')
 
 print('\n SVC')
-print(classification_report(y_test,svc_pred)) #SVC
+print(classification_report(y_test,svc_pred)) #Support Vector Machine
 print(confusion_matrix(y_test,svc_pred)) # see the classification report and confusion matrix
 
 
 print('\n Log')
-print(classification_report(y_test, log_pred)) #LogisticRegression
+print(classification_report(y_test, log_pred)) #Logistic Regression
 print(confusion_matrix(y_test, log_pred))
 
 
 print('\n RF')
-print(classification_report(y_test, rf_pred)) #RandomForest
+print(classification_report(y_test, rf_pred)) #Random Forest
 print(confusion_matrix(y_test, rf_pred))
 
 
 print('\n KNN')
-print(classification_report(y_test, KNN_pred)) #KNN
+print(classification_report(y_test, KNN_pred)) #K Nearest Neighbours
 print(confusion_matrix(y_test, KNN_pred))
 
 

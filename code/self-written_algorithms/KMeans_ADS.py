@@ -72,7 +72,7 @@ class K_means_nD:
 
             less_tol = self._centroid_shift_dist(centroids, old_centroids) # how much did the centers move by
 
-            if all(less_tol): # if they are all less than the defined tolerance then break the loop
+            if all(less_tol): # if all centroids shifted less than the defined tolerance then break the loop
                 break
 
         t1 = time.time()
@@ -104,7 +104,7 @@ class K_means_nD:
             for num, centroid in enumerate(centroids): # for each center
                 centroid = list(centroid) # cast to a list
                 distances[num] = np.sqrt(sum([(a - b) ** 2 for a, b in zip(points, centroid)])) # calculate all distances
-            classification.append(np.argmin(distances)) # add index of min distance
+            classification.append(np.argmin(distances)) # add index of min distance as assigned cluster
         k_data['classification'] = classification # create column with class in it
         return np.array(classification) # return array of classifications
 
@@ -129,9 +129,9 @@ class K_means_nD:
 
     def _create_centroids(self, n_clusters, data):
         n_features = data.shape[1] # number of columns in the dataset
-        centroids = [] # list that will contain tuples of the centtoid locations
+        centroids = [] # list that will contain tuples of the centroid locations
         for _ in range(n_clusters): # loop depending on how many cluster have been specified
-            centroid = [] # list that will contain points for sigle centroid
+            centroid = [] # list that will contain points for single centroid
             for i in range(n_features): # for each feature
                 cent_point = np.random.uniform(min(data[i]), max(data[i])) # random point within the feature max and min
                 centroid.append(cent_point) # add the point to the centroid
@@ -140,10 +140,10 @@ class K_means_nD:
 
     def _calc_distances_and_assign_cluster(self, data, centroids):
         cluster_num = [None] * len(data) # no records belong to any cluster yet so they are assigned None
-        for record in range(len(data)): # for row in datset
+        for record in range(len(data)): # for row in dataset
             distances = [] # will contain distances to each centroid
             points = list(data.loc[record, :]) # feature values as a list
-            for centroid in centroids: # each centroid
+            for centroid in centroids: # for each centroid
                 cent = list(centroid) # cast tuple to list
                 dist = np.sqrt(sum([(p - c) ** 2 for p, c in zip(points, cent)])) # calculate Euclidian distance to centroid
                 distances.append(dist) # add to distances list
@@ -158,7 +158,7 @@ class K_means_nD:
             num_k_data = data[data['cluster num'] == number] # get all data that belongs to the specific cluster
             cent_new = []
             for i in range(n_features):
-                cent = np.mean(num_k_data[i]) if len(num_k_data) != 0 else np.mean(data[i]) # mean of all datapoints of feature i
+                cent = np.mean(num_k_data[i]) if len(num_k_data) != 0 else np.mean(data[i]) # mean of all datapoints of feature i to get the cluster centre
                 cent_new.append(cent) # add it to cent_new list
             cent_new = tuple(cent_new) # cast to a tuple
             new_centroids.append(cent_new) # new centroid tuple added to list

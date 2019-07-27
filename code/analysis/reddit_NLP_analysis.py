@@ -25,14 +25,14 @@ reddit['REMOVED'] = reddit['REMOVED'].map({1:'Yes', 0:'No'}) # To make the under
 
 print(reddit.head(), '\n\n') # see the first 5 rows of data
 
-print('Description of the data: \n') # stats about the data
-print(reddit.describe(), '\n\n')
+print('Description of the data: \n')
+print(reddit.describe(), '\n\n')  # stats about the data
 
 print('Description of the data grouped by REMOVED: \n')
 print(reddit.groupby('REMOVED').describe(), '\n\n') # stats about the data group by category
 
 print('Getting length of each comment...')
-reddit['LENGTH'] = reddit['BODY'].apply(len) # find the length of each comment
+reddit['LENGTH'] = reddit['BODY'].apply(len) # find the length of each comment in characters
 print('done\n')
 
 reddit.hist(column = 'LENGTH', bins = 100, by = 'REMOVED', sharex = True) # histogram of num of characters in each comment
