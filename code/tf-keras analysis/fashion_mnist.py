@@ -6,7 +6,7 @@ import numpy as np
 
 print("Using TensorFlow version " + tf.__version__) # display version of tensorflow being used
 
-mnist = keras.datasets.mnist
+fashion_mnist = keras.datasets.fashion_mnist
 (train_images_mnist, train_labels_mnist), (test_images_mnist, test_labels_mnist) = fashion_mnist.load_data() # load the fashion mnist dataset
 
 l1_nodes = 500 # 500 nodes in l1
@@ -16,7 +16,7 @@ n_classes = 10 # numbers from 0-9 1 class for each number
 batch_size = 32
 epochs = 10 # number of times to run through the data
 
-x = tf.compat.v1.placeholder(tf.float32, [None, 784]) # placeholder tensor for the flattened images
+x = tf.compat.v1.placeholder(tf.float32, [None, 784]) # placeholder tensor for the flattened images (batch_size (unspecified), flattened img size)
 y = tf.compat.v1.placeholder(tf.float32) # placeholder tensor for the target one hot vector
 
 
